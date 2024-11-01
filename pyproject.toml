@@ -1,0 +1,11 @@
+[project]
+name = "aunties-cool-club"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django-allauth>=65.1.0",
+    "django>=5.1.2",
+    "python-decouple>=3.8",
+]

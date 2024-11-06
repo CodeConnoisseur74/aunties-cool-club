@@ -7,5 +7,13 @@ requires-python = ">=3.12"
 dependencies = [
     "django-allauth>=65.1.0",
     "django>=5.1.2",
+    "pre-commit>=4.0.1",
     "python-decouple>=3.8",
+    "ruff>=0.7.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-django>=4.9.0",
 ]

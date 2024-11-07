@@ -1,0 +1,6 @@
+<h2>Your Chat Rooms</h2>
+<ul>
+    {% for room in chatrooms %}
+        <li><a href="{% url 'chat_room' room.id %}">{{ room.name }}</a></li>
+    {% endfor %}
+</ul>

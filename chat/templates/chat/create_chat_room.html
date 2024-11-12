@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <form method="post" action="{% url 'create_chat_room' %}">
     {% csrf_token %}
     <label for="name">Chat Room Name:</label>

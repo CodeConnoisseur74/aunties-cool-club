@@ -11,14 +11,18 @@ from django.views.decorators.http import require_POST
 @require_POST
 def send_message(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+    error, message = None, None
     if request.user not in chat_room.members.all():
-        return JsonResponse({'error': 'Unauthorized'}, status=403)
+        error = "Unauthorized"
 
     text = request.POST.get('text')
-    if text:
+    if not text:
+        error = "Message is empty"
+
+    if error is not None:
         message = Message.objects.create(chat_room=chat_room, sender=request.user, text=text)
-        return render(request, 'chat/_message.html', {'message': message})
-    return JsonResponse({'error': 'Invalid data'}, status=400)
+
+    return render(request, 'chat/_message.html', {'error': error, 'message': message})
 
 
 def redirect_to_chat(request):

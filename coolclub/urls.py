@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
+from chat import views as chat_views  # Import views from chat app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),  # Django allauth URLs
-    path('chat/', include('chat.urls')),  # Chat app URLs
+    path('accounts/', include('allauth.urls')),
+    path('chat/', include('chat.urls')),
 
-    # Root path redirecting to chat room list view
-    path('', lambda request: redirect('list_chat_rooms'), name='home'),  # Redirect to the chat room list
+    # Use the redirect view for the root URL
+    path('', chat_views.redirect_to_chat, name='home'),
 ]

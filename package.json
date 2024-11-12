@@ -1,0 +1,16 @@
+{
+  "name": "aunties-cool-club",
+  "version": "1.0.0",
+  "description": "Chat app and all things cool sharing platform with chat from the Coolest Auntie in the Universe!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss -i mysite/static/css/input.css -o mysite/static/css/output.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.14"
+  }
+}

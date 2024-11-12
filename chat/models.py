@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 # ChatRoom model - to handle multiple rooms, but minimal setup for now
 class ChatRoom(models.Model):
     name = models.CharField(max_length=100)
+    members = models.ManyToManyField(User, related_name="chatrooms")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -29,3 +30,5 @@ class Message(models.Model):
 
     class Meta:
         ordering = ["-created_at"]  # Order messages by latest first
+
+

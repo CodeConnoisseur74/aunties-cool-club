@@ -5,15 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "dj-database-url>=2.3.0",
     "django-allauth>=65.1.0",
     "django>=5.1.2",
-    "pre-commit>=4.0.1",
+    "pillow>=11.0.0",
     "python-decouple>=3.8",
-    "ruff>=0.7.2",
 ]
-
-[dependency-groups]
-dev = [
+[tool.uv]
+dev-dependencies = [
+    "flake8>=7.1.1",
     "pytest>=8.3.3",
     "pytest-django>=4.9.0",
+    "pre-commit>=4.0.1",
+    "ruff>=0.7.2",
 ]

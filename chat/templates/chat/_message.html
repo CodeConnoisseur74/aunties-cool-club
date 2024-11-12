@@ -1,0 +1,9 @@
+{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% elif message %}
+    <div class="message">
+        {{ message }}
+    </div>
+{% endif %}

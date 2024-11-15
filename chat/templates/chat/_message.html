@@ -1,9 +1,16 @@
-{% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-{% elif message %}
-    <div class="message">
-        {{ message }}
-    </div>
-{% endif %}
+<!-- chat/templates/chat/_message.html -->
+<div class="message {% if message.sender == request.user %}text-right{% else %}text-left{% endif %}">
+  {% if message.message_type == 'post' %}
+      <div class="bg-green-100 p-2 rounded">
+          <strong>Post:</strong> {{ message.text }}
+      </div>
+  {% elif message.message_type == 'lesson' %}
+      <div class="bg-yellow-100 p-2 rounded">
+          <strong>Lesson:</strong> {{ message.text }}
+      </div>
+  {% else %}
+      <div class="bg-gray-100 p-2 rounded">
+          <strong>{{ message.sender.username }}:</strong> {{ message.text }}
+      </div>
+  {% endif %}
+</div>

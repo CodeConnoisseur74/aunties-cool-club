@@ -1,4 +1,3 @@
-# chat/models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -6,19 +5,40 @@ from django.contrib.auth.models import User
 class ChatRoom(models.Model):
     name = models.CharField(max_length=100)
     members = models.ManyToManyField(User, related_name="chatrooms")
+    admins = models.ManyToManyField(User, related_name="admin_chatrooms")
+    video_link = models.URLField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    parent = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="children"
+    )
+
+
 class Message(models.Model):
+    POST = "post"
+    MESSAGE = "message"
+    LESSON = "lesson"
+
+    MESSAGE_TYPE_CHOICES = [
+        (POST, "Post"),
+        (MESSAGE, "Message"),
+        (LESSON, "Lesson"),
+    ]
+
     chat_room = models.ForeignKey(
         ChatRoom, on_delete=models.CASCADE, related_name="messages"
     )
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
-    media = models.ImageField(
-        upload_to="chat_media/", null=True, blank=True
+    media = models.ImageField(upload_to="chat_media/", null=True, blank=True)
+    message_type = models.CharField(
+        max_length=10, choices=MESSAGE_TYPE_CHOICES, default=MESSAGE
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -27,5 +47,3 @@ class Message(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
-
-

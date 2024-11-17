@@ -8,11 +8,41 @@ assignees: CodeConnoisseur74
 ---
 
 <details>
-<summary>Task</summary>
-<!--All you need is a blank line-->
+  <summary>Task 1</summary>
 
-    + markdown list 1
-        + nested list 1
-        + nested list 2
-    + markdown list 2
+  - [ ] Sub-task 1
+  - [ ]  Sub-task 2
+  - [ ]  Sub-task 3
+  - [ ]  Sub-task 4
+
+</details>
+
+<details>
+  <summary>Task 2</summary>
+
+  - [ ] Sub-task 1
+  - [ ]  Sub-task 2
+  - [ ]  Sub-task 3
+  - [ ]  Sub-task 4
+
+</details>
+
+<details>
+  <summary>Task 3</summary>
+
+  - [ ] Sub-task 1
+  - [ ]  Sub-task 2
+  - [ ]  Sub-task 3
+  - [ ]  Sub-task 4
+
+</details>
+
+<details>
+  <summary>Task 4</summary>
+
+  - [ ] Sub-task 1
+  - [ ]  Sub-task 2
+  - [ ]  Sub-task 3
+  - [ ]  Sub-task 4
+
 </details>

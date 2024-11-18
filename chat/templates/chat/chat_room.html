@@ -5,20 +5,28 @@
       {% for message in messages %}
         <div class="{% if message.sender == request.user %}
 
+
             text-right
+
 
           {% else %}
 
+
             text-left
+
 
           {% endif %}">
           <div class="inline-block p-2 rounded-lg {% if message.sender == request.user %}
 
+
               bg-blue-500 text-white
+
 
             {% else %}
 
+
               bg-gray-300
+
 
             {% endif %}">
             <p>{{ message.text }}</p>
@@ -27,10 +35,15 @@
       {% endfor %}
     </div>
     <div class="p-4">
-      <form hx-post="{% url 'send_message' chat_room.id %}" hx-target="#messages" hx-swap="beforeend">
+      <form hx-post="{% url 'send_message' chat_room.id %}" hx-target="#chat-container" hx-swap="afterend" method="post">
         {% csrf_token %}
-        <input type="text" name="text" placeholder="Type your message..." class="w-full p-2 border rounded" />
-        <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+        <textarea name="text" class="w-full p-2 border rounded" placeholder="Type your message..." required></textarea>
+        <select name="message_type" class="mt-2 p-2 border rounded">
+          <option value="message">Message</option>
+          <option value="post">Post</option>
+          <option value="lesson">Lesson</option>
+        </select>
+        <button type="submit" class="mt-2 p-2 bg-blue-500 text-white rounded">Send</button>
       </form>
     </div>
   </div>

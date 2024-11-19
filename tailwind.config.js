@@ -1,10 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './accounts/templates/**/*.html',
-    './bites/templates/**/*.html',
-    './mysite/static/js/**/*.js',
-    './mysite/templates/**/*.html',
+    './coolclub/templates/**/*.html',
+    './chat/templates/**/*.html',
+    './aunties-cool-club/static/js/**/*.js',
   ],
   safelist: [
   ],
@@ -16,4 +15,3 @@ module.exports = {
   ],
   darkMode: ['class', '[data-theme="dark"]'], // Using custom attribute selector for dark mode
 }
-

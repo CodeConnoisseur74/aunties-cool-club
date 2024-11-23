@@ -15,3 +15,4 @@ module.exports = {
   ],
   darkMode: ['class', '[data-theme="dark"]'], // Using custom attribute selector for dark mode
 }
+login/signup

@@ -7,6 +7,13 @@ from .models import ChatRoom, Message
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+from allauth.account.views import LoginView
+
+
+@csrf_exempt
+def my_login_view(request):
+    return LoginView.as_view()(request)
 
 
 @login_required
@@ -142,3 +149,9 @@ def set_video_link(request, chat_room_id):
         chat_room.save()
 
     return redirect("chat_room", chat_room_id=chat_room.id)
+
+
+def load_history(request, room_id):
+    chat_room = get_object_or_404(ChatRoom, id=room_id)
+    messages = chat_room.messages.order_by("-created_at")[:50]  # Load last 50 messages
+    return render(request, "chat/_history.html", {"messages": messages})

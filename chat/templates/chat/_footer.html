@@ -1,0 +1,11 @@
+<div class="p-4 sticky bottom-0 bg-white">
+  <!-- Additional footer content -->
+  <p>&copy; 2024 My Chat App</p>
+
+  <!-- WebSocket-enabled form -->
+  <form id="chat-form">
+      {% csrf_token %}
+      <textarea id="message-input" name="text" class="w-full p-2 border rounded" placeholder="Type your message..." required></textarea>
+      <button type="submit" class="mt-2 p-2 bg-blue-500 text-white rounded">Send</button>
+  </form>
+</div>

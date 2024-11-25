@@ -1,0 +1,5 @@
+{% for message in messages %}
+<div>
+  <strong>{{ message.sender.username }}:</strong> {{ message.text }}
+</div>
+{% endfor %}

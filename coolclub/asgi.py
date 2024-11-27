@@ -1,16 +1,15 @@
-"""
-ASGI config for coolclub project.
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from chat.routing import websocket_urlpatterns
+from .fastapi_app import app as fastapi_app  # Import FastAPI app
 
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
-"""
-
-import os
-
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'coolclub.settings')
-
-application = get_asgi_application()
+application = ProtocolTypeRouter(
+    {
+        "http": fastapi_app,  # Route HTTP requests to FastAPI directly
+        "websocket": AuthMiddlewareStack(
+            URLRouter(
+                websocket_urlpatterns  # WebSocket routing
+            )
+        ),
+    }
+)

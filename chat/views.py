@@ -115,6 +115,13 @@ def chat_room(request, chat_room_id):
 
 
 @login_required
+def load_messages(request, chat_room_id):
+    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+    messages = chat_room.messages.all()[:50]  # Adjust the slice as needed
+    return render(request, "chat/_messages.html", {"messages": messages})
+
+
+@login_required
 def parent_dashboard(request):
     # Get all children of the logged-in parent
     children = request.user.children.all()

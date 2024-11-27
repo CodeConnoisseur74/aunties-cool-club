@@ -1,12 +1,20 @@
-# chat/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import ChatRoom, Message
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
+
+
+def my_htmx_view(request):
+    if request.headers.get("HX-Request"):
+        return HttpResponse("<div>HTMX content</div>")
+    return HttpResponse("<div>Non-HTMX content</div>")
+
+
+def home_view(request):
+    return HttpResponse("Home page")
 
 
 @login_required
@@ -14,28 +22,21 @@ from django.template.loader import render_to_string
 def send_message(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
 
-    # Check if the user is a member of the chat room
     if request.user not in chat_room.members.all():
-        return JsonResponse({"error": "Unauthorized"}, status=403)
+        return HttpResponse({"error": "Unauthorized"}, status=403)
 
-    # Get message data from the POST request
     text = request.POST.get("text", "").strip()
-    message_type = request.POST.get(
-        "message_type", Message.MESSAGE
-    )  # Default to "MESSAGE"
+    message_type = request.POST.get("message_type", Message.MESSAGE)
 
-    # Validate message content
     if not text:
-        return JsonResponse({"error": "Message cannot be empty."}, status=400)
+        return HttpResponse({"error": "Message cannot be empty."}, status=400)
 
-    # Create the message
     message = Message.objects.create(
         chat_room=chat_room, sender=request.user, text=text, message_type=message_type
     )
 
-    # Render the message using the partial template
     html = render_to_string("chat/_message.html", {"message": message})
-    return JsonResponse({"html": html})
+    return HttpResponse({"html": html})
 
 
 @login_required
@@ -64,7 +65,7 @@ def remove_member(request, chat_room_id, user_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
 
     if request.user not in chat_room.admins.all():
-        return JsonResponse({"error": "Unauthorized"}, status=403)
+        return HttpResponse({"error": "Unauthorized"}, status=403)
 
     user_to_remove = get_object_or_404(User, id=user_id)
     chat_room.members.remove(user_to_remove)
@@ -96,14 +97,11 @@ def list_chat_rooms(request):
 def chat_room(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
 
-    # Ensure the user is a member of the chat room
     if request.user not in chat_room.members.all():
         return redirect("list_chat_rooms")
 
-    # Get filter criteria from the request (optional)
     message_type = request.GET.get("message_type", None)
 
-    # Fetch messages based on type or fetch all
     if message_type:
         messages = chat_room.messages.filter(message_type=message_type)
     else:
@@ -117,16 +115,14 @@ def chat_room(request, chat_room_id):
 @login_required
 def load_messages(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
-    messages = chat_room.messages.all()[:50]  # Adjust the slice as needed
+    messages = chat_room.messages.all()[:50]
     return render(request, "chat/_messages.html", {"messages": messages})
 
 
 @login_required
 def parent_dashboard(request):
-    # Get all children of the logged-in parent
     children = request.user.children.all()
 
-    # Fetch chat rooms that the children are part of
     chatrooms = ChatRoom.objects.filter(members__in=[child.id for child in children])
 
     return render(
@@ -141,7 +137,7 @@ def set_video_link(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
 
     if request.user not in chat_room.admins.all():
-        return JsonResponse({"error": "Unauthorized"}, status=403)
+        return HttpResponse({"error": "Unauthorized"}, status=403)
 
     if request.method == "POST":
         video_link = request.POST.get("video_link")

@@ -3,16 +3,16 @@ module.exports = {
   content: [
     './coolclub/templates/**/*.html',
     './chat/templates/**/*.html',
-    './aunties-cool-club/static/js/**/*.js',
+    './static/js/**/*.js',
   ],
   safelist: [
+    // Add any classes you want to safelist here
   ],
   theme: {
     extend: {},
   },
   plugins: [
-    // Add any Tailwind plugins if needed
+    require('daisyui'),
   ],
-  darkMode: ['class', '[data-theme="dark"]'], // Using custom attribute selector for dark mode
-}
-login/signup
+  darkMode: ['class', '[data-theme="dark"]'],
+};

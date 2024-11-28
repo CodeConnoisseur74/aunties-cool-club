@@ -1,48 +1,22 @@
----
-name: Tasks List
-about: Tasks list with breakdown of tasks into sub-tasks list
-title: ''
-labels: Tasks List
-assignees: CodeConnoisseur74
+  <summary>Tasks List</summary>  
 
----
+  - [ ] sub-tasks
+  - [ ] sub-tasks
+  - [ ] sub-tasks
+<summary>Tasks List</summary>  
 
-<details>
-  <summary>Task 1</summary>
+  - [ ] sub-tasks
+  - [ ] sub-tasks
+  - [ ] sub-tasks
 
-  - [ ] Sub-task 1
-  - [ ]  Sub-task 2
-  - [ ]  Sub-task 3
-  - [ ]  Sub-task 4
+<summary>Tasks List</summary>  
 
-</details>
+  - [ ] sub-tasks
+  - [ ] sub-tasks
+  - [ ] sub-tasks
 
-<details>
-  <summary>Task 2</summary>
+<summary>Tasks List</summary>  
 
-  - [ ] Sub-task 1
-  - [ ]  Sub-task 2
-  - [ ]  Sub-task 3
-  - [ ]  Sub-task 4
-
-</details>
-
-<details>
-  <summary>Task 3</summary>
-
-  - [ ] Sub-task 1
-  - [ ]  Sub-task 2
-  - [ ]  Sub-task 3
-  - [ ]  Sub-task 4
-
-</details>
-
-<details>
-  <summary>Task 4</summary>
-
-  - [ ] Sub-task 1
-  - [ ]  Sub-task 2
-  - [ ]  Sub-task 3
-  - [ ]  Sub-task 4
-
-</details>
+  - [ ] sub-tasks
+  - [ ] sub-tasks
+  - [ ] sub-tasks

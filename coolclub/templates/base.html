@@ -1,37 +1,48 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Chat{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<html lang="en" data-theme="synthwave">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A real-time chat application powered by Django, TailwindCSS, and DaisyUI." />
+
+    <title>
+      {% block title %}
+        Chat
+      {% endblock %}
+    </title>
     <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-    {% block extra_head %}{% endblock %}
-</head>
-<body>
+    {% block extra_head %}
+
+    {% endblock %}
+  </head>
+  <body>
     <header>
-        <h1>Welcome to My Chat App</h1>
-        <nav>
-            <a href="{% url 'list_chat_rooms' %}">Chat Rooms</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'account_logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'account_login' %}">Login</a>
-                <a href="{% url 'account_signup' %}">Sign Up</a>
-            {% endif %}
-        </nav>
+      <h1>Welcome to My Chat App</h1>
+      <nav>
+        <a href="{% url 'list_chat_rooms' %}" aria-label="View Chat Rooms">Chat Rooms</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'account_logout' %}" aria-label="Account Logout">Logout</a>
+        {% else %}
+          <a href="{% url 'account_login' %}" aria-label="Account Login">Login</a>
+          <a href="{% url 'account_signup' %} " aria-label="Account Registration">Sign Up</a>
+        {% endif %}
+      </nav>
     </header>
 
     <main id="content">
-        {% block content %}{% endblock %}
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2024 My Chat App</p>
+      <p>&copy; 2024 My Chat App</p>
     </footer>
 
-    {% block extra_js %}{% endblock %}
-</body>
+    {% block extra_js %}
+
+    {% endblock %}
+  </body>
 </html>

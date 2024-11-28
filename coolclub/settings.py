@@ -102,7 +102,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "coolclub" / "templates",
+            BASE_DIR / "coolclub/templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {

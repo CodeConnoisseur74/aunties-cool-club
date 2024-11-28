@@ -1,16 +1,28 @@
-"""
-ASGI config for coolclub project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
-"""
-
 import os
-
 from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.auth import AuthMiddlewareStack
+from starlette.staticfiles import StaticFiles
+from starlette.routing import Mount
+from starlette.applications import Starlette
+from chat.routing import websocket_urlpatterns
+from .fastapi_app import app as fastapi_app
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'coolclub.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "coolclub.settings")
 
-application = get_asgi_application()
+django_asgi_app = get_asgi_application()
+
+static_app = StaticFiles(directory="staticfiles")
+
+application = ProtocolTypeRouter(
+    {
+        "http": Starlette(
+            routes=[
+                Mount("/static", app=static_app, name="static"),
+                Mount("/", app=django_asgi_app),
+                Mount("/api", app=fastapi_app),
+            ]
+        ),
+        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+    }
+)

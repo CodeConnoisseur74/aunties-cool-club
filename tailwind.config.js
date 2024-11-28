@@ -1,19 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './accounts/templates/**/*.html',
-    './bites/templates/**/*.html',
-    './mysite/static/js/**/*.js',
-    './mysite/templates/**/*.html',
+    './coolclub/templates/**/*.html',
+    './chat/templates/**/*.html',
+    './static/js/**/*.js',
   ],
   safelist: [
+    // Add any classes you want to safelist here
   ],
   theme: {
     extend: {},
   },
   plugins: [
-    // Add any Tailwind plugins if needed
+    require('daisyui'),
   ],
-  darkMode: ['class', '[data-theme="dark"]'], // Using custom attribute selector for dark mode
-}
-
+  darkMode: ['class', '[data-theme="dark"]'],
+};

@@ -36,7 +36,7 @@ def send_message(request, chat_room_id):
     )
 
     html = render_to_string("chat/_message.html", {"message": message})
-    return HttpResponse({"html": html})
+    return HttpResponse(html)
 
 
 @login_required

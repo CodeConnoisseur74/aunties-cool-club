@@ -6,25 +6,13 @@
     <div class="flex-grow overflow-y-auto p-4" id="messages" hx-get="{% url 'load_messages' chat_room.id %}" hx-trigger="load" hx-swap="innerHTML">
       <!-- Fallback for non-HTMX users -->
       {% for message in messages %}
-        <div class="{% if message.sender == request.user %}
-             text-right
-          {% else %}
-             text-left
-          {% endif %}">
-          <div class="inline-block p-2 rounded-lg {% if message.sender == request.user %}
-               bg-blue-500 text-white
-            {% else %}
-               bg-gray-300
-            {% endif %}">
-            <p>{{ message.text }}</p>
-          </div>
-        </div>
+        {% include 'chat/_message.html' with message=message %}
       {% endfor %}
     </div>
 
     <!-- Message Form -->
     <div class="p-4">
-      <form hx-post="{% url 'send_message' chat_room.id %}" hx-target="#messages" hx-swap="beforeend" method="post">
+      <form hx-post="{% url 'send_message' chat_room.id %}" hx-target="#messages" hx-swap="beforeend" hx-on="htmx:afterRequest: this.reset()" method="post">
         {% csrf_token %}
         <textarea name="text" class="w-full p-2 border rounded" placeholder="Type your message..." required></textarea>
         <select name="message_type" class="mt-2 p-2 border rounded">

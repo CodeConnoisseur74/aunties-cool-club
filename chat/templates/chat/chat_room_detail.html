@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Chat Details{% endblock %}
+
+{% block content %}
+    <h2>{{ chat.title }}</h2>
+    <div id="messages" style="border: 1px solid #ddd; height: 300px; overflow-y: auto;"></div>
+    <input id="messageInput" type="text" placeholder="Type a message" onkeydown="handleKeyPress(event)" />
+    <button onclick="sendMessage()">Send</button>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        const ws = new WebSocket("ws://127.0.0.1:8000/ws/chat/{{ chat_room_id }}/");
+        console.log(ws);
+
+        ws.onopen = () => console.log("WebSocket connection established!");
+        ws.onerror = (error) => console.error("WebSocket error:", error);
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const messagesDiv = document.getElementById("messages");
+            const newMessage = document.createElement("p");
+            newMessage.innerHTML = `<strong>${data.sender}:</strong> ${data.message}`;
+            messagesDiv.appendChild(newMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        };
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            ws.send(JSON.stringify({
+                message: input.value,
+                sender: "{{ request.user.username }}"
+            }));
+            input.value = "";
+        }
+    </script>
+
+{% endblock %}

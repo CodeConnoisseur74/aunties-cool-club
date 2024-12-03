@@ -10,18 +10,14 @@
       {% endfor %}
     </div>
 
-    <!-- Message Form -->
     <div class="p-4">
-      <form hx-post="{% url 'send_message' chat_room.id %}" hx-target="#messages" hx-swap="beforeend" hx-on="htmx:afterRequest: this.reset()" method="post">
-        {% csrf_token %}
-        <textarea name="text" class="w-full p-2 border rounded" placeholder="Type your message..." required></textarea>
-        <select name="message_type" class="mt-2 p-2 border rounded">
-          <option value="message">Message</option>
-          <option value="post">Post</option>
-          <option value="lesson">Lesson</option>
-        </select>
-        <button type="submit" class="mt-2 p-2 bg-blue-500 text-white rounded">Send</button>
-      </form>
+      <input id="messageInput" type="text" placeholder="Type a message" onkeydown="handleKeyPress(event)" />
+      <select name="message_type" id="message_type" class="mt-2 p-2 border rounded">
+        <option value="message">Message</option>
+        <option value="post">Post</option>
+        <option value="lesson">Lesson</option>
+      </select>
+      <button onclick="sendMessage()" type="submit" class="mt-2 p-2 bg-blue-500 text-white rounded">Send</button>
     </div>
   </div>
 {% endblock %}

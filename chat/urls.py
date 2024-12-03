@@ -8,7 +8,4 @@ urlpatterns = [
     path("<int:chat_room_id>/join/", views.join_chat_room, name="join_chat_room"),
     path("<int:chat_room_id>/leave/", views.leave_chat_room, name="leave_chat_room"),
     path("<int:chat_room_id>/send/", views.send_message, name="send_message"),
-    path(
-        "<int:chat_room_id>/load_messages/", views.load_messages, name="load_messages"
-    ),
 ]

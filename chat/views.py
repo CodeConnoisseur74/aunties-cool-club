@@ -100,23 +100,14 @@ def chat_room(request, chat_room_id):
     if request.user not in chat_room.members.all():
         return redirect("list_chat_rooms")
 
-    message_type = request.GET.get("message_type", None)
+    messages = chat_room.messages.order_by("created_at")
 
-    if message_type:
-        messages = chat_room.messages.filter(message_type=message_type)
-    else:
-        messages = chat_room.messages.all()
+    if message_type := request.GET.get("message_type", None) is not None:
+        messages = messages.filter(message_type=message_type)
 
     return render(
         request, "chat/chat_room.html", {"chat_room": chat_room, "messages": messages}
     )
-
-
-@login_required
-def load_messages(request, chat_room_id):
-    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
-    messages = chat_room.messages.all()[:50]
-    return render(request, "chat/_messages.html", {"messages": messages})
 
 
 @login_required

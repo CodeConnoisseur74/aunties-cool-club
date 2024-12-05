@@ -6,9 +6,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A real-time chat application powered by Django, TailwindCSS, and DaisyUI." />
-    <title>{% block title %}Chat{% endblock %}</title>
+    <title>
+      {% block title %}
+        Chat
+      {% endblock %}
+    </title>
     <script src="https://unpkg.com/htmx.org@1.7.0"></script>
-    {% block extra_head %}{% endblock %}
+    <link href="{% static 'src/output.css' %}" rel="stylesheet" />
+    {% block extra_head %}
+    {% endblock %}
   </head>
   <body>
     <header>
@@ -26,6 +32,15 @@
 
     <main id="content">
       {% block content %}
+        <div class="card w-96 bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Hello, DaisyUI!</h2>
+            <p>This is a card styled with DaisyUI.</p>
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary">Click Me</button>
+            </div>
+          </div>
+        </div>
       {% endblock %}
     </main>
 
@@ -34,6 +49,7 @@
     </footer>
 
     {% block extra_js %}
+
     {% endblock %}
   </body>
 </html>

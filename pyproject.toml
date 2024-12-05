@@ -14,7 +14,6 @@ dependencies = [
     "pillow>=11.0.0",
     "python-decouple>=3.8",
     "lock>=2018.3.25.2110",
-    "django-tailwind>=3.8.0",
 ]
 [tool.uv]
 dev-dependencies = [

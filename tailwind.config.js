@@ -1,16 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './coolclub/templates/**/*.html',
     './chat/templates/**/*.html',
-    './aunties-cool-club/static/js/**/*.js',
+    './coolclub/static/js/**/*.js',
+    './coolclub/templates/**/*.html',
   ],
-  safelist: [
-  ],
-  daisyui: {
-    themes: ["synthwave"],
+  darkMode: "media",
+  theme: {
+      extend: {},
   },
-  plugins: [
-    require('daisyui'),
-  ],
-}
+  plugins: [],
+};

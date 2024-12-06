@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Manage Invitations for {{ chat_room.name }}</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>User</th>
+        <th>Invited By</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for invitation in invitations %}
+        <tr>
+          <td>{{ invitation.invited_user.username }}</td>
+          <td>
+            {% if invitation.invited_by %}
+              {{ invitation.invited_by.username }}
+            {% else %}
+              Self-requested
+            {% endif %}
+          </td>
+          <td>{{ invitation.get_status_display }}</td>
+          <td>
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="invitation_id" value="{{ invitation.id }}" />
+              <button name="action" value="accept">Accept</button>
+              <button name="action" value="decline">Decline</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

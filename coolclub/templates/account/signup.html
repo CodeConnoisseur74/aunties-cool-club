@@ -1,46 +1,51 @@
 {% extends "account/base_entrance.html" %}
 {% load allauth i18n %}
 {% block head_title %}
-    {% trans "Signup" %}
-    askjdanjn
+    {% trans "Sign Up" %}
 {% endblock head_title %}
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign Up" %}
-    {% endelement %}
-    {% setvar link %}
-        <a href="{{ login_url }}">
+<div class="max-w-lg mx-auto mt-16 p-8 bg-white shadow-md rounded-lg">
+    <h1 class="text-2xl font-semibold text-gray-800 text-center mb-4">{% trans "Sign Up" %}</h1>
+    <p class="text-gray-600 text-center mb-6">
+        {% setvar link %}
+            <a href="{{ login_url }}" class="text-blue-600 hover:underline">
         {% endsetvar %}
         {% setvar end_link %}
-        </a>
-    {% endsetvar %}
-    {% element p %}
-        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
-    {% endelement %}
+            </a>
+        {% endsetvar %}
+        {% blocktranslate %}
+            Already have an account? Then please {{ link }}sign in{{ end_link }}.
+        {% endblocktranslate %}
+    </p>
     {% if not SOCIALACCOUNT_ONLY %}
-        {% url 'account_signup' as action_url %}
-        {% element form form=form method="post" action=action_url tags="entrance,signup" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button tags="prominent,signup" type="submit" %}
-                    {% trans "Sign Up" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
+    {% url 'account_signup' as action_url %}
+    <form method="post" action="{{ action_url }}" class="space-y-6">
+        {% csrf_token %}
+        <div class="space-y-4">
+            {% element fields form=form unlabeled=True %}
+                <div class="flex flex-col">
+                    {{ field }}
+                </div>
+            {% endelement %}
+        </div>
+        {{ redirect_field }}
+        <div>
+            <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                {% trans "Sign Up" %}
+            </button>
+        </div>
+    </form>
     {% endif %}
     {% if PASSKEY_SIGNUP_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
-            {% trans "Sign up using a passkey" %}
-        {% endelement %}
+    <hr class="my-6 border-gray-300">
+    <a href="{{ signup_by_passkey_url }}" class="block w-full py-2 px-4 text-center border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">
+        {% trans "Sign up using a passkey" %}
+    </a>
     {% endif %}
     {% if SOCIALACCOUNT_ENABLED %}
+    <div class="mt-6">
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    </div>
     {% endif %}
+</div>
 {% endblock content %}

@@ -47,3 +47,30 @@ class Message(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class Invitation(models.Model):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    DECLINED = "declined"
+
+    STATUS_CHOICES = [
+        (PENDING, "Pending"),
+        (ACCEPTED, "Accepted"),
+        (DECLINED, "Declined"),
+    ]
+
+    chat_room = models.ForeignKey(
+        ChatRoom, on_delete=models.CASCADE, related_name="invitations"
+    )
+    invited_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="invitations"
+    )
+    invited_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="sent_invitations"
+    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.invited_user.username} invited to {self.chat_room.name}"

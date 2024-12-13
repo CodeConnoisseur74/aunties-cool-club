@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import ChatRoom, Message
+from .models import ChatRoom, Message, Invitation
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
@@ -136,3 +136,61 @@ def set_video_link(request, chat_room_id):
         chat_room.save()
 
     return redirect("chat_room", chat_room_id=chat_room.id)
+
+
+@login_required
+def invite_user(request, chat_room_id):
+    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+
+    if request.user not in chat_room.admins.all():
+        return HttpResponse({"error": "Unauthorized"}, status=403)
+
+    if request.method == "POST":
+        user_id = request.POST.get("user_id")
+        user = get_object_or_404(User, id=user_id)
+
+        Invitation.objects.create(
+            chat_room=chat_room, invited_user=user, invited_by=request.user
+        )
+
+        return HttpResponse("Invitation sent successfully!", status=200)
+
+    return render(
+        request,
+        "chat/invite_user.html",
+        {"chat_room": chat_room, "users": User.objects.exclude(chatrooms=chat_room)},
+    )
+
+
+@login_required
+def manage_invitations(request, chat_room_id):
+    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+
+    if request.user not in chat_room.admins.all():
+        return HttpResponse({"error": "Unauthorized"}, status=403)
+
+    pending_invitations = chat_room.invitations.filter(status=Invitation.PENDING)
+
+    if request.method == "POST":
+        invitation_id = request.POST.get("invitation_id")
+        action = request.POST.get("action")
+
+        invitation = get_object_or_404(
+            Invitation, id=invitation_id, chat_room=chat_room
+        )
+
+        if action == "accept":
+            invitation.status = Invitation.ACCEPTED
+            chat_room.members.add(invitation.invited_user)
+        elif action == "decline":
+            invitation.status = Invitation.DECLINED
+
+        invitation.save()
+
+        return redirect("manage_invitations", chat_room_id=chat_room.id)
+
+    return render(
+        request,
+        "chat/manage_invitations.html",
+        {"chat_room": chat_room, "invitations": pending_invitations},
+    )

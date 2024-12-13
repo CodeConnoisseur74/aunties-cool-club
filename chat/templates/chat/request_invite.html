@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Request Invite to {{ chat_room.name }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Request Invite</button>
+  </form>
+{% endblock %}

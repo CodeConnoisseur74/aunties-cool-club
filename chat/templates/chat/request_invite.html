@@ -2,8 +2,10 @@
 
 {% block content %}
   <h1>Request Invite to {{ chat_room.name }}</h1>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Request Invite</button>
-  </form>
+  <div id="invite-container">
+    <form hx-post="{% url 'request_invite' chat_room.id %}" hx-target="#invite-container" hx-swap="outerHTML">
+      {% csrf_token %}
+      <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Request Invite</button>
+    </form>
+  </div>
 {% endblock %}

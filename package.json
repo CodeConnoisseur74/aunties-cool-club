@@ -4,12 +4,13 @@
   "description": "Chat app and all things cool sharing platform with chat from the Coolest Auntie in the Universe!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss -i static/css/input.css -o static/css/output.css --minify"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "daisyui": "^4.12.14"
+    "tailwindcss": "^3.4.16"
   }
 }

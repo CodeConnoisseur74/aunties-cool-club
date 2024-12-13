@@ -28,7 +28,7 @@
     <header>
       <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
         <div>
-          <a href="/" class="text-xl text-white">Djangochat</a>
+          <a href="/" class="text-xl text-white">Chat</a>
         </div>
         <div class="flex items-center space-x-4">
           <a href="{% url 'list_chat_rooms' %}" class="text-white hover:text-gray-200" aria-label="View Chat Rooms">Chat Rooms</a>
@@ -41,6 +41,46 @@
         </div>
       </nav>
     </header>
+
+    <div class="container mx-auto flex-grow p-6 flex" id="messages">
+      {% if messages %}
+        <div class="w-full clearfix mb-4">
+          {% for message in messages %}
+            <div class="p-4 mb-4 rounded border text-sm
+                      {% if message.tags == 'success' %}
+
+
+                bg-green-100 border-green-400 text-green-700
+
+
+
+              {% elif message.tags == 'error' %}
+
+
+                bg-red-100 border-red-400 text-red-700
+
+
+
+              {% elif message.tags == 'warning' %}
+
+
+                bg-yellow-100 border-yellow-400 text-yellow-700
+
+
+
+              {% elif message.tags == 'info' %}
+
+
+                bg-blue-100 border-blue-400 text-blue-700
+
+
+
+              {% endif %}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
     <h1>Welcome to My Chat App</h1>
 
     <main id="content">

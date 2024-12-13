@@ -2,33 +2,33 @@
 
 {% block content %}
   <h1>Manage Invitations for {{ chat_room.name }}</h1>
-  <table>
-    <thead>
+  <table class="min-w-full border-collapse border border-gray-200 bg-white">
+    <thead class="bg-gray-50">
       <tr>
-        <th>User</th>
-        <th>Invited By</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th class="px-4 py-2 border">User</th>
+        <th class="px-4 py-2 border">Invited By</th>
+        <th class="px-4 py-2 border">Status</th>
+        <th class="px-4 py-2 border">Actions</th>
       </tr>
     </thead>
     <tbody>
       {% for invitation in invitations %}
-        <tr>
-          <td>{{ invitation.invited_user.username }}</td>
-          <td>
+        <tr class="hover:bg-gray-100">
+          <td class="px-4 py-2 border">{{ invitation.invited_user.username }}</td>
+          <td class="px-4 py-2 border">
             {% if invitation.invited_by %}
               {{ invitation.invited_by.username }}
             {% else %}
               Self-requested
             {% endif %}
           </td>
-          <td>{{ invitation.get_status_display }}</td>
-          <td>
+          <td class="px-4 py-2 border">{{ invitation.get_status_display }}</td>
+          <td class="px-4 py-2 border">
             <form method="post" style="display:inline;">
               {% csrf_token %}
               <input type="hidden" name="invitation_id" value="{{ invitation.id }}" />
-              <button name="action" value="accept">Accept</button>
-              <button name="action" value="decline">Decline</button>
+              <button name="action" value="{{ ACCEPTED }}" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-700">Accept</button>
+              <button name="action" value="{{ DECLINED }}" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-700">Decline</button>
             </form>
           </td>
         </tr>

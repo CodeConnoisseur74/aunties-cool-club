@@ -1,3 +1,5 @@
-<div class="inline-block p-2 rounded-lg {% if message.sender == request.user %} bg-blue-500 text-white {% else %} bg-gray-300 {% endif %}">
-  <p><i>{{ message.sender }}</i>: {{ message.text }}</p>
+<div class="chat {% if message.sender == request.user %}chat-sender{% else %}chat-receiver{% endif %}">
+  <div class="chat-bubble">
+    <p><b>{{ message.sender }}</b>: {{ message.text }}</p>
+  </div>
 </div>

@@ -15,7 +15,7 @@ def my_htmx_view(request):
 
 
 def home_view(request):
-    return HttpResponse("Home page")
+    return render(request, "home.html")
 
 
 @login_required

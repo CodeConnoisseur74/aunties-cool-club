@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="synthwave">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,66 +24,31 @@
       }
     </style>
   </head>
-  <body class="bg-teal-600">
-    <header>
-      <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
-        <div>
-          <a href="/" class="text-xl text-white">Chat</a>
+  <body class="bass-100">
+    <nav class="navbar glass rounded-box flex w-full gap-2 shadow max-md:flex-col md:items-center">
+      <div class="flex w-full items-center justify-between">
+        <div class="navbar-start items-center justify-between max-md:w-full">
+          <a class="link text-base-content/90 link-neutral text-xl font-semibold no-underline" href="/">Chat</a>
+          <div class="md:hidden">
+            <button type="button" class="collapse-toggle btn btn-outline btn-secondary btn-sm btn-square" data-collapse="#default-navbar-collapse" aria-controls="default-navbar-collapse" aria-label="Toggle navigation">
+              <span class="icon-[tabler--menu-2] collapse-open:hidden size-4"></span>
+              <span class="icon-[tabler--x] collapse-open:block hidden size-4"></span>
+            </button>
+          </div>
         </div>
-        <div class="flex items-center space-x-4">
-          <a href="{% url 'list_chat_rooms' %}" class="text-white hover:text-gray-200" aria-label="View Chat Rooms">Chat Rooms</a>
-          {% if user.is_authenticated %}
-            <a href="{% url 'account_logout' %}" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700" aria-label="Account Logout">Logout</a>
-          {% else %}
-            <a href="{% url 'account_login' %}" class="text-white hover:text-gray-200" aria-label="Account Login">Login</a>
-            <a href="{% url 'account_signup' %}" class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700" aria-label="Account Registration">Sign Up</a>
-          {% endif %}
-        </div>
-      </nav>
-    </header>
+      </div>
+      <div class="navbar-end space-x-4">
+        <a href="{% url 'list_chat_rooms' %}" class="btn btn-primary">Chat Rooms</a>
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'account_logout' %}" class="btn btn-primary" aria-label="Account Logout">Logout</a>
+        {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-primary" aria-label="Account Login">Login</a>
+          <a href="{% url 'account_signup' %}" class="btn btn-primary" aria-label="Account Registration">Sign Up</a>
+        {% endif %}
+      </div>
+    </nav>
 
-    <div class="container mx-auto flex-grow p-6 flex" id="messages">
-      {% if messages %}
-        <div class="w-full clearfix mb-4">
-          {% for message in messages %}
-            <div class="p-4 mb-4 rounded border text-sm
-                      {% if message.tags == 'success' %}
-
-
-                bg-green-100 border-green-400 text-green-700
-
-
-
-              {% elif message.tags == 'error' %}
-
-
-                bg-red-100 border-red-400 text-red-700
-
-
-
-              {% elif message.tags == 'warning' %}
-
-
-                bg-yellow-100 border-yellow-400 text-yellow-700
-
-
-
-              {% elif message.tags == 'info' %}
-
-
-                bg-blue-100 border-blue-400 text-blue-700
-
-
-
-              {% endif %}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-
-    <h1>Welcome to My Chat App</h1>
-
-    <main id="content">
+    <main class="p-6">
       {% block content %}
 
       {% endblock %}
@@ -94,7 +59,7 @@
     </footer>
 
     {% block extra_js %}
-
+      <script src="{% static 'js/flyonui.js' %}"></script>
     {% endblock %}
   </body>
 </html>

@@ -1,51 +1,61 @@
-{% extends "account/base_entrance.html" %}
+{% extends 'account/base_entrance.html' %}
 {% load allauth i18n %}
-{% block head_title %}
-    {% trans "Sign Up" %}
-{% endblock head_title %}
+
+{% block title %}
+  {% trans 'Sign up' %}|
+{% endblock %}
+
 {% block content %}
-<div class="max-w-lg mx-auto mt-16 p-8 bg-white shadow-md rounded-lg">
-    <h1 class="text-2xl font-semibold text-gray-800 text-center mb-4">{% trans "Sign Up" %}</h1>
-    <p class="text-gray-600 text-center mb-6">
-        {% setvar link %}
-            <a href="{{ login_url }}" class="text-blue-600 hover:underline">
-        {% endsetvar %}
-        {% setvar end_link %}
-            </a>
-        {% endsetvar %}
-        {% blocktranslate %}
-            Already have an account? Then please {{ link }}sign in{{ end_link }}.
-        {% endblocktranslate %}
-    </p>
-    {% if not SOCIALACCOUNT_ONLY %}
-    {% url 'account_signup' as action_url %}
-    <form method="post" action="{{ action_url }}" class="space-y-6">
-        {% csrf_token %}
-        <div class="space-y-4">
-            {% element fields form=form unlabeled=True %}
-                <div class="flex flex-col">
-                    {{ field }}
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex flex-col items-center">
+      <!-- Title -->
+      <h1 class="text-5xl font-bold mb-6">{% trans 'Sign up' %}</h1>
+
+      <!-- Form -->
+      {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'account_signup' as action_url %}
+        <form method="post" action="{{ action_url }}" class="card w-full max-w-sm shadow-lg bg-base-100 p-6">
+          {% csrf_token %}
+
+          <!-- Dynamic Form Fields -->
+          {% for field in form %}
+            <div class="form-control mb-4">
+              <label class="label"><span class="label-text">{{ field.label }}</span></label>
+              {{ field }}
+              {% for error in field.errors %}
+                <div class="alert alert-error mt-2">
+                  <span>{{ error|escape }}</span>
                 </div>
-            {% endelement %}
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <!-- Redirect Field -->
+          {{ redirect_field }}
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary w-full">{% trans 'Sign up' %}</button>
+        </form>
+      {% endif %}
+
+      <!-- Optional: Passkey Signup -->
+      {% if PASSKEY_SIGNUP_ENABLED %}
+        <hr class="my-6 border-gray-300" />
+        <a href="{{ signup_by_passkey_url }}" class="block w-full py-2 px-4 text-center border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">{% trans 'Sign up using a passkey' %}</a>
+      {% endif %}
+
+      <!-- Social Account Signup -->
+      {% if SOCIALACCOUNT_ENABLED %}
+        <div class="mt-6 w-full max-w-sm">
+          {% include 'socialaccount/snippets/login.html' with page_layout='entrance' %}
         </div>
-        {{ redirect_field }}
-        <div>
-            <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                {% trans "Sign Up" %}
-            </button>
-        </div>
-    </form>
-    {% endif %}
-    {% if PASSKEY_SIGNUP_ENABLED %}
-    <hr class="my-6 border-gray-300">
-    <a href="{{ signup_by_passkey_url }}" class="block w-full py-2 px-4 text-center border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">
-        {% trans "Sign up using a passkey" %}
-    </a>
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-    <div class="mt-6">
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+      {% endif %}
+
+      <!-- Login Link -->
+      <p class="mt-6 text-sm text-gray-600">
+        {% trans 'Already have an account?' %}
+        <a href="{{ login_url }}" class="text-blue-600 hover:underline">{% trans 'Sign in' %}</a>
+      </p>
     </div>
-    {% endif %}
-</div>
-{% endblock content %}
+  </div>
+{% endblock %}

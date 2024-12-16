@@ -49,6 +49,17 @@
     </nav>
 
     <main class="p-6">
+      <!-- Django Messages -->
+      {% if messages %}
+        <div class="container mx-auto mt-4">
+          {% for message in messages %}
+            <div class="alert {{ message.tags }} mb-4">
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       {% block content %}
 
       {% endblock %}

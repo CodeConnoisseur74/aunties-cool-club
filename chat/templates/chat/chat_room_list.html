@@ -1,7 +1,25 @@
-{% extends "base.html" %}
-<h2>Your Chat Rooms</h2>
-<ul>
+{% extends 'base.html' %}
+
+{% block title %}
+  Chat Rooms
+{% endblock %}
+
+{% block content %}
+  <div class="p-10 lg:p-20 text-center">
+    <h1 class="text-3xl lg:text-6xl text-primary">Rooms</h1>
+  </div>
+
+  <div class="w-full flex flex-wrap justify-center items-center gap-4">
     {% for room in chatrooms %}
-        <li><a href="{% url 'chat_room' room.id %}">{{ room.name }}</a></li>
+      <div class="w-full lg:w-1/4 px-3 py-3">
+        <div class="card glass base-shadow">
+          <div class="card-body text-center">
+            <h2 class="mb-5 text-2x font-semibold card-title">{{ room.name }}</h2>
+
+            <a href="{% url 'chat_room' room.id %}" class="px-5 py-3 block rounded-xl text-black bg-primary">Join</a>
+          </div>
+        </div>
+      </div>
     {% endfor %}
-</ul>
+  </div>
+{% endblock %}

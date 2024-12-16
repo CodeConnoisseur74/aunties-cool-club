@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import ChatRoom, Message, Invitation
+from django.contrib import messages
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
@@ -14,7 +15,7 @@ def my_htmx_view(request):
 
 
 def home_view(request):
-    return HttpResponse("Home page")
+    return render(request, "home.html")
 
 
 @login_required
@@ -143,7 +144,10 @@ def invite_user(request, chat_room_id):
     chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
 
     if request.user not in chat_room.admins.all():
-        return HttpResponse({"error": "Unauthorized"}, status=403)
+        messages.error(
+            request, "You are not authorized to invite users to this chat room."
+        )
+        return redirect("chat_room", chat_room_id=chat_room.id)
 
     if request.method == "POST":
         user_id = request.POST.get("user_id")
@@ -153,13 +157,38 @@ def invite_user(request, chat_room_id):
             chat_room=chat_room, invited_user=user, invited_by=request.user
         )
 
-        return HttpResponse("Invitation sent successfully!", status=200)
+        messages.success(request, f"Invitation sent to {user.username} successfully!")
+        return redirect("chat_room", chat_room_id=chat_room.id)
 
     return render(
         request,
         "chat/invite_user.html",
         {"chat_room": chat_room, "users": User.objects.exclude(chatrooms=chat_room)},
     )
+
+
+@login_required
+def request_invite(request, chat_room_id):
+    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+
+    if request.user in chat_room.members.all():
+        return HttpResponse({"error": "You are already a member."}, status=400)
+
+    existing_request = Invitation.objects.filter(
+        chat_room=chat_room, invited_user=request.user, status=Invitation.PENDING
+    ).first()
+
+    if existing_request:
+        return HttpResponse({"error": "You already requested an invite."}, status=400)
+
+    Invitation.objects.create(
+        chat_room=chat_room,
+        invited_user=request.user,
+        invited_by=None,
+        status=Invitation.PENDING,
+    )
+
+    return HttpResponse("Invite request sent successfully!", status=200)
 
 
 @login_required
@@ -179,10 +208,10 @@ def manage_invitations(request, chat_room_id):
             Invitation, id=invitation_id, chat_room=chat_room
         )
 
-        if action == "accept":
+        if action == Invitation.ACCEPTED:
             invitation.status = Invitation.ACCEPTED
             chat_room.members.add(invitation.invited_user)
-        elif action == "decline":
+        elif action == Invitation.DECLINED:
             invitation.status = Invitation.DECLINED
 
         invitation.save()
@@ -192,5 +221,10 @@ def manage_invitations(request, chat_room_id):
     return render(
         request,
         "chat/manage_invitations.html",
-        {"chat_room": chat_room, "invitations": pending_invitations},
+        {
+            "chat_room": chat_room,
+            "invitations": pending_invitations,
+            "ACCEPTED": Invitation.ACCEPTED,  # Pass constants
+            "DECLINED": Invitation.DECLINED,  # Pass constants
+        },
     )

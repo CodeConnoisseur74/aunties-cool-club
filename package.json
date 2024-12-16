@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "tailwindcss": "^3.4.16"
+  },
+  "dependencies": {
+    "flyonui": "^1.2.0"
   }
 }

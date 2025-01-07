@@ -1,17 +1,39 @@
 {% extends 'base.html' %}
 
-{% block content %}
-  <form method="post" action="{% url 'create_chat_room' %}">
-    {% csrf_token %}
-    <label for="name">Chat Room Name:</label>
-    <input type="text" id="name" name="name" required />
+{% block title %}
+  Create Chat Room
+{% endblock %}
 
-    <label for="admins">Select Admins:</label>
-    <select id="admins" name="admins" multiple>
-      {% for user in users %}
-        <option value="{{ user.id }}">{{ user.username }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit">Create Room</button>
-  </form>
+{% block content %}
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex flex-col items-center">
+      <!-- Header -->
+      <h1 class="text-5xl font-bold mb-6">Create Chat Room</h1>
+
+      <!-- Form -->
+      <form method="post" action="{% url 'create_chat_room' %}" class="card w-full max-w-sm shadow-lg bg-base-100 p-6">
+        {% csrf_token %}
+
+        <!-- Chat Room Name -->
+        <div class="form-control mb-4">
+          <label for="name" class="label"><span class="label-text">Chat Room Name</span></label>
+          <input type="text" id="name" name="name" class="input input-bordered w-full" placeholder="Enter chat room name" required />
+        </div>
+
+        <!-- Admin Selection -->
+        <div class="form-control mb-4">
+          <label for="admins" class="label"><span class="label-text">Select Admins</span></label>
+          <select id="admins" name="admins" class="select select-bordered w-full" multiple>
+            {% for user in users %}
+              <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
+          <small class="text-gray-500">Hold CTRL (or CMD on Mac) to select multiple admins.</small>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-full">Create Room</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

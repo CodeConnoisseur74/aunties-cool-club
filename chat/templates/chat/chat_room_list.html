@@ -15,11 +15,22 @@
         <div class="card glass base-shadow">
           <div class="card-body text-center">
             <h2 class="mb-5 text-2x font-semibold card-title">{{ room.name }}</h2>
-
             <a href="{% url 'chat_room' room.id %}" class="px-5 py-3 block rounded-xl text-black bg-primary">Join</a>
           </div>
         </div>
       </div>
+    {% empty %}
+      <!-- No Rooms Message -->
+      <div class="w-full text-center mt-10">
+        <p class="text-lg text-gray-500">No chat rooms available.</p>
+      </div>
     {% endfor %}
   </div>
+
+  <!-- Create Chat Room Button for Admins -->
+  {% if user.is_superuser %}
+    <div class="w-full flex justify-center mt-10">
+      <a href="{% url 'create_chat_room' %}" class="btn btn-primary px-8 py-3 text-lg">Create Chat Room</a>
+    </div>
+  {% endif %}
 {% endblock %}

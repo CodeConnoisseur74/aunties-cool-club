@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from .models import ChatRoom, Message, Invitation
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 
@@ -41,7 +42,11 @@ def send_message(request, chat_room_id):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def create_chat_room(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("You do not have permission to access this page.")
+
     if request.method == "POST":
         name = request.POST.get("name")
         admin_ids = request.POST.getlist("admins")
@@ -52,6 +57,7 @@ def create_chat_room(request):
         if admin_ids:
             chat_room.admins.add(*User.objects.filter(id__in=admin_ids))
 
+        messages.success(request, f"Chat room '{name}' created successfully!")
         return redirect("chat_room", chat_room_id=chat_room.id)
 
     return render(request, "chat/create_chat_room.html", {"users": User.objects.all()})
@@ -59,6 +65,12 @@ def create_chat_room(request):
 
 def redirect_to_chat(request):
     return redirect("list_chat_rooms")
+
+
+def alert(request):
+    messages.success(request, "You have successfully logged in!")
+    messages.error(request, "There was an error processing your request.")
+    return render(request, "my_template.html")
 
 
 @login_required

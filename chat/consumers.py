@@ -5,6 +5,7 @@ from django.db import transaction
 from channels.db import database_sync_to_async
 from .models import ChatRoom, Message
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope["url_route"]["kwargs"]["room_name"]
@@ -14,11 +15,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         messages = await self.get_chat_history()
         for message in messages:
-            await self.send(text_data=json.dumps({
-                "message": message.text,
-                "sender": message.sender.username,  # Use username for serialization
-                "timestamp": message.created_at.isoformat(),
-            }))
+            await self.send(
+                text_data=json.dumps(
+                    {
+                        "message": message.text,
+                        "sender": message.sender.username,
+                        "timestamp": message.created_at.isoformat(),
+                    }
+                )
+            )
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
@@ -28,7 +33,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         message = data["message"]
-        sender = data['sender']
+        sender = data["sender"]
 
         await self.save_message(sender, message)
 

@@ -13,3 +13,23 @@ repos:
     - id: ruff
       args: [ --fix ]
     - id: ruff-format
+
+- repo: https://github.com/astral-sh/uv-pre-commit
+  # uv version.
+  rev: 0.5.20
+  hooks:
+    # Run the pip compile
+    - id: pip-compile
+      args: [requirements.in, -o, requirements.txt]
+
+default_install_hook_types:
+  - pre-commit
+  - post-checkout
+  - post-merge
+  - post-rewrite
+repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.5.20
+    hooks:
+      - id: uv-sync

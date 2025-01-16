@@ -51,11 +51,14 @@
     <main class="p-6">
       <!-- Django Messages -->
       {% if messages %}
-        <div class="container mx-auto mt-4">
+        <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 space-y-4 w-11/12 max-w-lg">
           {% for message in messages %}
-            <div class="alert {{ message.tags }} mb-4">
-              <span>{{ message }}</span>
-            </div>
+            {% if message.tags == 'success' or message.tags == 'error' %}
+              <div class="alert alert-soft {{ message.tags|default:'alert-primary' }} removing:translate-x-5 removing:opacity-0 flex items-center gap-4 transition duration-300 ease-in-out" role="alert" id="message-{{ forloop.counter }}">
+                <span>{{ message }}</span>
+                <button class="ms-auto leading-none" data-remove-element="#message-{{ forloop.counter }}" aria-label="Close Button"><span class="icon-[tabler--x] size-5"></span></button>
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
       {% endif %}

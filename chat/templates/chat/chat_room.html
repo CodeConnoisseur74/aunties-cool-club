@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Chat Room{% endblock %}
+{% block title %}
+  Chat Room
+{% endblock %}
 
 {% block content %}
   <!-- Header Section -->
-  <div class="hero bg-base-200 py-10">
-    <div class="hero-content text-center">
-      <h1 class="text-5xl font-bold">{{ chat_room.name }}</h1>
+  <div class="lg:w-2/4 mx-4 lg:mx-auto">
+    <div class="hero bg-base-200 py-10 card shadow-lg">
+      <div class="hero-content text-center">
+        <h1 class="text-5xl font-bold">{{ chat_room.name }}</h1>
+      </div>
     </div>
   </div>
 
@@ -37,43 +41,45 @@
 
 {% block extra_js %}
   <script>
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/chat/{{ chat_room.id }}/");
+    const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{ chat_room.id }}/')
 
-    ws.onopen = () => console.log("WebSocket connection established!");
-    ws.onerror = (error) => console.error("WebSocket error:", error);
+    ws.onopen = () => console.log('WebSocket connection established!')
+    ws.onerror = (error) => console.error('WebSocket error:', error)
 
     ws.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      const messagesDiv = document.getElementById("messages");
-      const newMessage = document.createElement("div");
-      newMessage.className = `chat ${data.sender === "{{ request.user.username }}" ? "chat-sender" : "chat-receiver"}`;
+      const data = JSON.parse(event.data)
+      const messagesDiv = document.getElementById('messages')
+      const newMessage = document.createElement('div')
+      newMessage.className = `chat ${data.sender === '{{ request.user.username }}' ? 'chat-sender' : 'chat-receiver'}`
       newMessage.innerHTML = `
-        <div class="chat-bubble">
-          <b>${data.sender}</b>: ${data.message}
-        </div>`;
-      messagesDiv.appendChild(newMessage);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    };
+                <div class="chat-bubble">
+                  <b>${data.sender}</b>: ${data.message}
+                </div>`
+      messagesDiv.appendChild(newMessage)
+      messagesDiv.scrollTop = messagesDiv.scrollHeight
+    }
 
     function handleKeyPress(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        sendMessage()
       }
     }
 
     function sendMessage() {
-      const input = document.getElementById("messageInput");
-      const messageType = document.getElementById("message_type").value;
+      const input = document.getElementById('messageInput')
+      const messageType = document.getElementById('message_type').value
       if (input.value.trim()) {
-        ws.send(JSON.stringify({
-          message: input.value.trim(),
-          sender: "{{ request.user.username }}",
-          type: messageType
-        }));
-        input.value = "";
+        ws.send(
+          JSON.stringify({
+            message: input.value.trim(),
+            sender: '{{ request.user.username }}',
+            type: messageType
+          })
+        )
+        input.value = ''
       } else {
-        alert("The message cannot be empty!");
+        alert('The message cannot be empty!')
       }
     }
   </script>

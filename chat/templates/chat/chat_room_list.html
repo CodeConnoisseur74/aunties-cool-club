@@ -17,7 +17,8 @@
             <h2 class="mb-5 text-2x font-semibold card-title">{{ room.name }}</h2>
             <a href="{% url 'chat_room' room.id %}" class="px-5 py-3 block rounded-xl text-black bg-primary">Join</a>
           </div>
-        </div>
+        </div>  <!-- Chat Messages Section -->
+
       </div>
     {% empty %}
       <!-- No Rooms Message -->

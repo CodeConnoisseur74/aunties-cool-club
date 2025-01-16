@@ -1,9 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth.models import User
 from django.db import transaction
 from channels.db import database_sync_to_async
-from .models import ChatRoom, Message
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -56,6 +54,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, sender, content):
+        from django.contrib.auth.models import User
+        from .models import ChatRoom, Message
         with transaction.atomic():
             room = ChatRoom.objects.get(id=self.room_id)
             user = User.objects.get(username=sender)
@@ -63,6 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_chat_history(self):
+        from .models import Message
         with transaction.atomic():
             return list(
                 Message.objects.filter(chat_room__id=self.room_id)

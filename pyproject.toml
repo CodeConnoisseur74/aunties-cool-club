@@ -15,6 +15,7 @@ dependencies = [
     "python-decouple>=3.8",
     "lock>=2018.3.25.2110",
     "gunicorn>=23.0.0",
+    "whitenoise>=6.8.2",
 ]
 [tool.uv]
 dev-dependencies = [

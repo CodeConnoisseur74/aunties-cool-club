@@ -45,6 +45,7 @@ def send_message(request, chat_room_id):
 @user_passes_test(lambda u: u.is_superuser)
 def create_chat_room(request):
     if not request.user.is_superuser:
+        messages.error(request, "You do not have permission to create a chat room.")
         return HttpResponseForbidden("You do not have permission to access this page.")
 
     if request.method == "POST":
@@ -88,8 +89,16 @@ def remove_member(request, chat_room_id, user_id):
 
 @login_required
 def join_chat_room(request, chat_room_id):
-    chat_room = ChatRoom.objects.get(id=chat_room_id)
+    chat_room = get_object_or_404(ChatRoom, id=chat_room_id)
+
+    if request.user in chat_room.members.all():
+        messages.error(request, "You are already a member of this chat room!")
+        return redirect("list_chat_rooms")
+
     chat_room.members.add(request.user)
+    messages.success(
+        request, f"You have successfully joined the chat room '{chat_room.name}'!"
+    )
     return redirect("chat_room", chat_room_id=chat_room.id)
 
 

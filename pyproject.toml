@@ -16,6 +16,7 @@ dependencies = [
     "lock>=2018.3.25.2110",
     "gunicorn>=23.0.0",
     "whitenoise>=6.8.2",
+    "psycopg2>=2.9.10",
 ]
 [tool.uv]
 dev-dependencies = [

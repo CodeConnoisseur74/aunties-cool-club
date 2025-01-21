@@ -41,7 +41,8 @@
 
 {% block extra_js %}
   <script>
-    const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{ chat_room.id }}/')
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const ws = new WebSocket(protocol + window.location.host + '/ws/chat/{{ chat_room.id }}/');
 
     ws.onopen = () => console.log('WebSocket connection established!')
     ws.onerror = (error) => console.error('WebSocket error:', error)

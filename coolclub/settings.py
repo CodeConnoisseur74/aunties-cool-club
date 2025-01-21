@@ -1,6 +1,4 @@
-import os
 from pathlib import Path
-import urllib.parse as urlparse
 
 from decouple import Csv, config
 import dj_database_url
@@ -39,27 +37,14 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = "coolclub.asgi.application"
 
-default_redis_url = os.getenv("REDIS_URL", "redis://127.0.0.1:6379")
-redis_url = config("REDISGREEN_URL", default=default_redis_url)
-url = urlparse.urlparse(redis_url)
-
-REDIS_HOST = url.hostname
-REDIS_PORT = url.port
-REDIS_PASSWORD = url.password  # RedisGreen URLs include authentication
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [{
-                "address": (REDIS_HOST, REDIS_PORT),
-                "password": REDIS_PASSWORD,
-            }],
+            "hosts": [config("REDISGREEN_URL")],
         },
     },
 }
-
-
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",

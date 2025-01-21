@@ -179,3 +179,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://secret-tundra-81085-3ebf0f327486.herokuapp.com',
+    'https://*.herokuapp.com',
+]
+

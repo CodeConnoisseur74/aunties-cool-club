@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Chat Room
+{% endblock %}
+
+{% block content %}
+  <!-- Header Section -->
+  <div class="lg:w-2/4 mx-4 lg:mx-auto">
+    <div class="hero bg-base-200 py-10 card shadow-lg">
+      <div class="hero-content text-center">
+        <h1 class="text-5xl font-bold">{{ chat_room.name }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Messages Section -->
+  <div class="lg:w-2/4 mx-4 lg:mx-auto mt-6 card glass shadow-lg">
+    <div class="card-body space-y-4 overflow-y-auto h-[50vh]" id="messages">
+      {% for message in messages %}
+        {% include 'chat/_message.html' with message=message %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Message Input Section -->
+  <div class="lg:w-2/4 mx-4 lg:mx-auto mt-6 card glass shadow-lg">
+    <div class="card-body">
+      <div class="flex items-center space-x-3">
+        <input id="messageInput" type="text" class="input input-bordered flex-1" placeholder="Type a message" onkeydown="handleKeyPress(event)" />
+        <select id="message_type" name="message_type" class="select select-bordered w-32">
+          <option value="message">Message</option>
+          <option value="post">Post</option>
+          <option value="lesson">Lesson</option>
+        </select>
+        <button class="btn btn-primary w-24" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{ chat_room.id }}/')
+
+    ws.onopen = () => console.log('WebSocket connection established!')
+    ws.onerror = (error) => console.error('WebSocket error:', error)
+
+    ws.onmessage = function (event) {
+      const data = JSON.parse(event.data)
+      const messagesDiv = document.getElementById('messages')
+      const newMessage = document.createElement('div')
+      newMessage.className = `chat ${data.sender === '{{ request.user.username }}' ? 'chat-sender' : 'chat-receiver'}`
+      newMessage.innerHTML = `
+                <div class="chat-bubble">
+                  <b>${data.sender}</b>: ${data.message}
+                </div>`
+      messagesDiv.appendChild(newMessage)
+      messagesDiv.scrollTop = messagesDiv.scrollHeight
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        sendMessage()
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput')
+      const messageType = document.getElementById('message_type').value
+      if (input.value.trim()) {
+        ws.send(
+          JSON.stringify({
+            message: input.value.trim(),
+            sender: '{{ request.user.username }}',
+            type: messageType
+          })
+        )
+        input.value = ''
+      } else {
+        alert('The message cannot be empty!')
+      }
+    }
+  </script>
+{% endblock %}

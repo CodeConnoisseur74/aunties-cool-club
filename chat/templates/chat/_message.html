@@ -1,0 +1,5 @@
+<div class="chat {% if message.sender == request.user %}chat-sender{% else %}chat-receiver{% endif %}">
+  <div class="chat-bubble">
+    <p><b>{{ message.sender }}</b>: {{ message.text }}</p>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+{% extends "account/base_entrance.html" %}
+{% load allauth i18n %}
+
+{% block title %}
+  {% trans 'Sign Out' %}|
+{% endblock %}
+
+{% block content %}
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex flex-col items-center">
+      <!-- Title -->
+      <h1 class="text-5xl font-bold mb-6">{% trans 'Sign Out' %}</h1>
+
+      <!-- Confirmation Message -->
+      <p class="text-gray-600 text-center mb-6">
+        {% trans 'Are you sure you want to sign out?' %}
+      </p>
+
+      <!-- Form -->
+      {% url 'account_logout' as action_url %}
+      <form method="post" action="{{ action_url }}" class="card w-full max-w-sm shadow-lg bg-base-100 p-6">
+        {% csrf_token %}
+        {{ redirect_field }}
+
+        <!-- Sign Out Button -->
+        <button type="submit" class="btn btn-error w-full">{% trans 'Sign Out' %}</button>
+      </form>
+
+      <!-- Return to Sign In Link -->
+      <p class="mt-6 text-sm text-gray-600">
+        <a href="{% url 'account_login' %}" class="text-blue-600 hover:underline">{% trans 'Return to Sign In' %}</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'account/base_entrance.html' %}
+{% load allauth i18n %}
+
+{% block title %}
+  {% trans 'Sign up' %}|
+{% endblock %}
+
+{% block content %}
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex flex-col items-center">
+      <!-- Title -->
+      <h1 class="text-5xl font-bold mb-6">{% trans 'Sign up' %}</h1>
+
+      <!-- Form -->
+      {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'account_signup' as action_url %}
+        <form method="post" action="{{ action_url }}" class="card w-full max-w-sm shadow-lg bg-base-100 p-6">
+          {% csrf_token %}
+
+          <!-- Dynamic Form Fields -->
+          {% for field in form %}
+            <div class="form-control mb-4">
+              <label class="label"><span class="label-text">{{ field.label }}</span></label>
+              {{ field }}
+              {% for error in field.errors %}
+                <div class="alert alert-error mt-2">
+                  <span>{{ error|escape }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <!-- Redirect Field -->
+          {{ redirect_field }}
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary w-full">{% trans 'Sign up' %}</button>
+        </form>
+      {% endif %}
+
+      <!-- Optional: Passkey Signup -->
+      {% if PASSKEY_SIGNUP_ENABLED %}
+        <hr class="my-6 border-gray-300" />
+        <a href="{{ signup_by_passkey_url }}" class="block w-full py-2 px-4 text-center border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50">{% trans 'Sign up using a passkey' %}</a>
+      {% endif %}
+
+      <!-- Social Account Signup -->
+      {% if SOCIALACCOUNT_ENABLED %}
+        <div class="mt-6 w-full max-w-sm">
+          {% include 'socialaccount/snippets/login.html' with page_layout='entrance' %}
+        </div>
+      {% endif %}
+
+      <!-- Login Link -->
+      <p class="mt-6 text-sm text-gray-600">
+        {% trans 'Already have an account?' %}
+        <a href="{{ login_url }}" class="text-blue-600 hover:underline">{% trans 'Sign in' %}</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

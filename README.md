@@ -6,7 +6,7 @@ the purpose of this app is to communicate with my Nephews in North America and t
 
 [**Live site**]([https://gloss-37a7c75fa1bb.herokuapp.com/](https://aunties-coolclub-6c09b0cba0e7.herokuapp.com/))
 
-![Device Mockups]()
+![Device Mockups](cool-club-django-chat.png)
 
 
 ## Heroku Deployment
